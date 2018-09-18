@@ -11,16 +11,17 @@
  */
 public class Solver8x8 {
 
-    
     // Board representation
-
+    int[8][8] board;
+    int[8][8] numBlanked;
+    int[8][8] invalid;
+    int[2] initQueen;
+    int[2] lastQueen;
     
     
-
     // Initialize all to empty
     public Solver8x8() {
-
-        
+        resetBoards();
     }
 
     /**
@@ -30,15 +31,72 @@ public class Solver8x8 {
      * 
      */
     public int[][] solve() {
-        
-        // do something
-        
-        // return a nice board
-        return b2board();
+        int queens;
+        while (True) {
+            for (int queens = 0; queens < 8; queens++) {
+                if (isValidPosition()) {
+                    placeQueen();
+                    if (queens == 0) {
+                        initQueen[0] = lastQueen[0];
+                        initQueen[1] = lastQueen[1];
+                    }
+                    updateBoard();
+                    updateNumBlanks();
+                } else
+                    break;
+            }
+            if (numQueens == 8)
+                return cleanup();
+            resetBoards();
+            invalid[initQueen[0]][initQueen[1]] = 1;
+            
+        }
     }
     
-
+    private void placeQueen() {
+        int minx = 0;
+        int miny = 0;
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++) {
+                boolean smallerValid = numBlanked[i][j] != -1 && numBlanked[i][j] < numBlanked[minx][miny];
+                if (invalid[i][j] == 1 && (smallerValid || numBlanked[minx][miny] == -1)) {
+                    minx = i;
+                    miny = j;
+                }
+            }
+        board[minx][miny] = 1;
+        lastQueen[0] = minx;
+        lastQueen[1] = miny;
+    }
     
+    private void updateBoard() {
+        //ToDo
+    }
+    
+    private void updateNumBlanks() {
+        //ToDo
+    }
+    
+    private boolean isValidPosition() {
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; i < 8; j++)
+                if (board[i][j] == 0)
+                    return True;
+        return False;
+    
+    private void resetBoards() {
+        board = new int[8][8];
+        numBlanked = new int[8][8];
+        invalid = new int[8][8];
+    }
+    
+    private int[][] cleanup() {
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (board[i][j] == -1)
+                    board[i][j] = 0;
+        return board;
+    }
     
     
     /*
