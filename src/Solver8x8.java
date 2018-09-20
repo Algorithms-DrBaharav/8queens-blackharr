@@ -22,6 +22,7 @@ public class Solver8x8 {
     // Initialize all to empty
     public Solver8x8() {
         resetBoards();
+        updateNumBlanks();
     }
 
     /**
@@ -70,11 +71,52 @@ public class Solver8x8 {
     }
     
     private void updateBoard() {
-        //ToDo
+        for (int i = 0; i < 8; i++) {
+            if (board[lastQueen[0]][i] == 0)
+                board[lastQueen[0]][i] = -1;
+            if (board[i][lastQueen[1]] == 0)
+                board[i][lastQueen[1]] = -1;
+        }
+        
+        for (int rdir = 1, rdir > -2; rdir -= 2)
+            for (int cdir = 1; cdir > -2; cdir -= 2)
+                for (int i = 1; ValidUpdatePosition(lastQueen[0], lastQueen[1], rdir, cdir, i); i++)
+                    board[lastQueen[0]+rdir*i][lastQueen[1]+cdir*i] = -1;
+    }
+    
+                     
+    boolean validUpdatePosition(rbase, cbase, rdir, cdir, i) {
+        validRow = 0 <= rbase+rdir*i && rbase+rdir*i < 8;
+        validCol = 0 <= cbase+cdir*i && cbase+cdir*i < 8;
+        if (!(validRow && validCol))
+            return False;
+        notQueen = board[rbase+rdir*i][cbase+cdir*i] == 0;
+        return True;
     }
     
     private void updateNumBlanks() {
-        //ToDo
+        for (int r = 0; r < 8; r++)
+            for (int c = 0; c < 8; c++) {
+                if (board[r][c] == -1)
+                    numBlanked[r][c] = -1;
+                else
+                    updateTile(r, c);
+            }
+    }
+    
+    private void updateTile(int r, int c) {
+        int numBlankable = 0;
+        for (int i = 0; i < 8; i++) {
+            if (i != c && board[r][i] == 0)
+                numBlankable++;
+            if (i != r && board[i][c] == 0)
+                numBlankable++;
+        }
+        
+        for (int rdir = 1, rdir > -2; rdir -= 2)
+            for (int cdir = 1; cdir > -2; cdir -= 2)
+                for (int i = 1; ValidUpdatePosition(r, c, rdir, cdir, i); i++)
+                    numBlankable++;
     }
     
     private boolean isValidPosition() {
