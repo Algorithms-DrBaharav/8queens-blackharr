@@ -23,6 +23,8 @@ public class Solver8x8 {
     public Solver8x8() {
         resetBoards();
         updateNumBlanks();
+        initQueen = new int[2];
+        lastQueen = new int[2];
     }
 
     /**
