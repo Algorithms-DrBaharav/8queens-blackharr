@@ -35,8 +35,6 @@ public class Solver8x8 {
 	 * 
 	 */
 	public int[][] solve() {
-		StopWatch watch = new StopWatch();
-		watch.start();
 		int queens;
 		int attempts = 1;
 		while (true) {
@@ -56,8 +54,6 @@ public class Solver8x8 {
 			printBoard(board);
 			System.out.println("Attempts: "+ attempts +", Queens: "+ queens);
 			if (queens == 8) {
-				watch.stop();
-				System.out.println(watch.getElapsedTime());
 				return cleanup();
 			}
 			resetBoards();
